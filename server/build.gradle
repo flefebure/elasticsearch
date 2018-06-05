@@ -26,13 +26,39 @@ apply plugin: 'nebula.optional-base'
 apply plugin: 'nebula.maven-base-publish'
 apply plugin: 'nebula.maven-scm'
 
+task sourceJar(type: Jar) {
+  from sourceSets.main.allJava
+}
 publishing {
   publications {
-    nebula {
-      artifactId 'elasticsearch'
+
+    maven(MavenPublication) {
+      if (project.version.toString().endsWith('-SNAPSHOT'))
+        version "${project.version}".replaceAll('-SNAPSHOT', '') + ".SOFTBRIDGE-SNAPSHOT"
+      else
+        version "${project.version}.SOFTBRIDGE"
+      artifactId "elasticsearch"
+      from components.java
+      artifact sourceJar {
+        classifier "sources"
+      }
+    }
+  }
+  repositories {
+    maven {
+      credentials {
+        username "${userRepo}"
+        password "${passwordRepo}"
+      }
+      if (project.version.toString().endsWith('-SNAPSHOT')) {
+        url "${snapshotsRepo}"
+      } else {
+        url "${releasesRepo}"
+      }
     }
   }
 }
+
 
 archivesBaseName = 'elasticsearch'
 

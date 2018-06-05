@@ -21,6 +21,7 @@ package org.elasticsearch.script;
 
 import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.search.Scorer;
+import org.elasticsearch.index.query.QueryShardContext;
 import org.elasticsearch.index.similarity.ScriptedSimilarity.Doc;
 import org.elasticsearch.index.similarity.ScriptedSimilarity.Field;
 import org.elasticsearch.index.similarity.ScriptedSimilarity.Query;
@@ -158,7 +159,7 @@ public class MockScriptEngine implements ScriptEngine {
         }
 
 
-        public FilterScript.LeafFactory createFilterScript(Map<String, Object> params, SearchLookup lookup) {
+        public FilterScript.LeafFactory createFilterScript(Map<String, Object> params, SearchLookup lookup, QueryShardContext queryShardContext) {
             return new MockFilterScript(lookup, params, script);
         }
 

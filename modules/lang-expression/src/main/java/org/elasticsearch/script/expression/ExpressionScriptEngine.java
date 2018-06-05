@@ -109,7 +109,7 @@ public class ExpressionScriptEngine extends AbstractComponent implements ScriptE
             ExecutableScript.Factory factory = (p) -> new ExpressionExecutableScript(expr, p);
             return context.factoryClazz.cast(factory);
         } else if (context.instanceClazz.equals(FilterScript.class)) {
-            FilterScript.Factory factory = (p, lookup) -> newFilterScript(expr, lookup, p);
+            FilterScript.Factory factory = (p, lookup, queryShardContext) -> newFilterScript(expr, lookup, p);
             return context.factoryClazz.cast(factory);
         }
         throw new IllegalArgumentException("expression engine does not know how to handle script context [" + context.name + "]");
