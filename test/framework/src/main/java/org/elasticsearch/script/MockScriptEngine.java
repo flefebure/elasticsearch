@@ -145,7 +145,7 @@ public class MockScriptEngine implements ScriptEngine {
             return new MockExecutableScript(context, script != null ? script : ctx -> source);
         }
 
-        public SearchScript.LeafFactory createSearchScript(Map<String, Object> params, SearchLookup lookup) {
+        public SearchScript.LeafFactory createSearchScript(Map<String, Object> params, SearchLookup lookup, QueryShardContext queryShardContext) {
             Map<String, Object> context = new HashMap<>();
             if (options != null) {
                 context.putAll(options); // TODO: remove this once scripts know to look for options under options key

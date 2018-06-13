@@ -249,7 +249,7 @@ public final class TermsSetQueryBuilder extends AbstractQueryBuilder<TermsSetQue
             Map<String, Object> params = new HashMap<>();
             params.putAll(minimumShouldMatchScript.getParams());
             params.put("num_terms", queries.size());
-            SearchScript.LeafFactory leafFactory = factory.newFactory(params, context.lookup());
+            SearchScript.LeafFactory leafFactory = factory.newFactory(params, context.lookup(), context);
             longValuesSource = new ScriptLongValueSource(minimumShouldMatchScript, leafFactory);
         } else {
             throw new IllegalStateException("No minimum should match has been specified");

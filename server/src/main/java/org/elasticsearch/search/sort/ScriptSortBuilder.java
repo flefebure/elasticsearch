@@ -306,7 +306,7 @@ public class ScriptSortBuilder extends SortBuilder<ScriptSortBuilder> {
     @Override
     public SortFieldAndFormat build(QueryShardContext context) throws IOException {
         final SearchScript.Factory factory = context.getScriptService().compile(script, SearchScript.CONTEXT);
-        final SearchScript.LeafFactory searchScript = factory.newFactory(script.getParams(), context.lookup());
+        final SearchScript.LeafFactory searchScript = factory.newFactory(script.getParams(), context.lookup(), context);
 
         MultiValueMode valueMode = null;
         if (sortMode != null) {

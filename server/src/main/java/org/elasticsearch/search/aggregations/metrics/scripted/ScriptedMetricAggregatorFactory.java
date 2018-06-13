@@ -76,7 +76,7 @@ public class ScriptedMetricAggregatorFactory extends AggregatorFactory<ScriptedM
         }
 
         final ExecutableScript initScript = this.initScript.newInstance(params);
-        final SearchScript.LeafFactory mapScript = this.mapScript.newFactory(params, lookup);
+        final SearchScript.LeafFactory mapScript = this.mapScript.newFactory(params, lookup, null);
         final ExecutableScript combineScript = this.combineScript.newInstance(params);
 
         final Script reduceScript = deepCopyScript(this.reduceScript, context);

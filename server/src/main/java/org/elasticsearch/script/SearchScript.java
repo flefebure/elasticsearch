@@ -22,6 +22,7 @@ import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.search.Scorer;
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.common.lucene.ScorerAware;
+import org.elasticsearch.index.query.QueryShardContext;
 import org.elasticsearch.search.lookup.LeafDocLookup;
 import org.elasticsearch.search.lookup.LeafSearchLookup;
 import org.elasticsearch.search.lookup.SearchLookup;
@@ -153,7 +154,7 @@ public abstract class SearchScript implements ScorerAware, ExecutableScript {
 
     /** A factory to construct stateful {@link SearchScript} factories for a specific index. */
     public interface Factory {
-        LeafFactory newFactory(Map<String, Object> params, SearchLookup lookup);
+        LeafFactory newFactory(Map<String, Object> params, SearchLookup lookup, QueryShardContext queryShardContext);
     }
 
     /** The context used to compile {@link SearchScript} factories. */

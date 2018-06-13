@@ -132,7 +132,7 @@ public final class PainlessScriptEngine extends AbstractComponent implements Scr
             GenericElasticsearchScript painlessScript =
                 (GenericElasticsearchScript)compile(compiler, scriptName, scriptSource, params);
 
-            SearchScript.Factory factory = (p, lookup) -> new SearchScript.LeafFactory() {
+            SearchScript.Factory factory = (p, lookup, queryShardContext) -> new SearchScript.LeafFactory() {
                 @Override
                 public SearchScript newInstance(final LeafReaderContext context) {
                     return new ScriptImpl(painlessScript, p, lookup, context);

@@ -52,19 +52,19 @@ public class NeedsScoreTests extends ESSingleNodeTestCase {
         SearchLookup lookup = new SearchLookup(index.mapperService(), shardContext::getForField, null);
 
         SearchScript.Factory factory = service.compile(null, "1.2", SearchScript.CONTEXT, Collections.emptyMap());
-        SearchScript.LeafFactory ss = factory.newFactory(Collections.emptyMap(), lookup);
+        SearchScript.LeafFactory ss = factory.newFactory(Collections.emptyMap(), lookup, null);
         assertFalse(ss.needs_score());
 
         factory = service.compile(null, "doc['d'].value", SearchScript.CONTEXT, Collections.emptyMap());
-        ss = factory.newFactory(Collections.emptyMap(), lookup);
+        ss = factory.newFactory(Collections.emptyMap(), lookup, null);
         assertFalse(ss.needs_score());
 
         factory = service.compile(null, "1/_score", SearchScript.CONTEXT, Collections.emptyMap());
-        ss = factory.newFactory(Collections.emptyMap(), lookup);
+        ss = factory.newFactory(Collections.emptyMap(), lookup, null);
         assertTrue(ss.needs_score());
 
         factory = service.compile(null, "doc['d'].value * _score", SearchScript.CONTEXT, Collections.emptyMap());
-        ss = factory.newFactory(Collections.emptyMap(), lookup);
+        ss = factory.newFactory(Collections.emptyMap(), lookup, null);
         assertTrue(ss.needs_score());
     }
 

@@ -59,7 +59,7 @@ public class ExpertScriptPlugin extends Plugin implements ScriptPlugin {
             }
             // we use the script "source" as the script identifier
             if ("pure_df".equals(scriptSource)) {
-                SearchScript.Factory factory = (p, lookup) -> new SearchScript.LeafFactory() {
+                SearchScript.Factory factory = (p, lookup, queryShardContext) -> new SearchScript.LeafFactory() {
                     final String field;
                     final String term;
                     {

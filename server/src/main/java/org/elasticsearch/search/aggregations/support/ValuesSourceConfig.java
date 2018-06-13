@@ -121,7 +121,7 @@ public class ValuesSourceConfig<VS extends ValuesSource> {
             return null;
         } else {
             SearchScript.Factory factory = context.getScriptService().compile(script, SearchScript.AGGS_CONTEXT);
-            return factory.newFactory(script.getParams(), context.lookup());
+            return factory.newFactory(script.getParams(), context.lookup(), context);
         }
     }
 

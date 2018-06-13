@@ -103,7 +103,7 @@ public class ExpressionScriptEngine extends AbstractComponent implements ScriptE
             }
         });
         if (context.instanceClazz.equals(SearchScript.class)) {
-            SearchScript.Factory factory = (p, lookup) -> newSearchScript(expr, lookup, p);
+            SearchScript.Factory factory = (p, lookup, queryShardContext) -> newSearchScript(expr, lookup, p);
             return context.factoryClazz.cast(factory);
         } else if (context.instanceClazz.equals(ExecutableScript.class)) {
             ExecutableScript.Factory factory = (p) -> new ExpressionExecutableScript(expr, p);

@@ -546,7 +546,7 @@ public class TopHitsAggregationBuilder extends AbstractAggregationBuilder<TopHit
             for (ScriptField field : scriptFields) {
                 QueryShardContext shardContext = context.getQueryShardContext();
                 SearchScript.Factory factory = shardContext.getScriptService().compile(field.script(), SearchScript.CONTEXT);
-                SearchScript.LeafFactory searchScript = factory.newFactory(field.script().getParams(), shardContext.lookup());
+                SearchScript.LeafFactory searchScript = factory.newFactory(field.script().getParams(), shardContext.lookup(), shardContext);
                 fields.add(new org.elasticsearch.search.fetch.subphase.ScriptFieldsContext.ScriptField(
                     field.fieldName(), searchScript, field.ignoreFailure()));
             }
