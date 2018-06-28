@@ -97,6 +97,7 @@ public class QueryShardContext extends QueryRewriteContext {
     private boolean mapUnmappedFieldAsString;
     private NestedScope nestedScope;
     private boolean isFilter;
+    private final Map<String, Object> freeMap;
 
     public QueryShardContext(int shardId, IndexSettings indexSettings, BitsetFilterCache bitsetFilterCache,
                              BiFunction<MappedFieldType, String, IndexFieldData<?>> indexFieldDataLookup, MapperService mapperService,
@@ -116,6 +117,7 @@ public class QueryShardContext extends QueryRewriteContext {
         this.reader = reader;
         this.clusterAlias = clusterAlias;
         this.fullyQualifiedIndexName = RemoteClusterAware.buildRemoteIndexName(clusterAlias, indexSettings.getIndex().getName());
+        freeMap = new HashMap<>();
     }
 
     public QueryShardContext(QueryShardContext source) {
@@ -431,5 +433,9 @@ public class QueryShardContext extends QueryRewriteContext {
      */
     public String getFullyQualifiedIndexName() {
         return fullyQualifiedIndexName;
+    }
+
+    public Map<String, Object> getFreeMap() {
+        return freeMap;
     }
 }

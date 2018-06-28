@@ -42,6 +42,43 @@ test {
   jvmArg '-XX:-OmitStackTraceInFastThrow'
 }
 
+task sourceJar(type: Jar) {
+  from sourceSets.main.allJava
+}
+
+apply plugin: 'nebula.maven-base-publish'
+
+publishing {
+  publications {
+
+    maven(MavenPublication) {
+      if (project.version.toString().endsWith('-SNAPSHOT'))
+        version "${project.version}".replaceAll('-SNAPSHOT', '') + ".SOFTBRIDGE-SNAPSHOT"
+      else
+        version "${project.version}.SOFTBRIDGE"
+      artifactId "lang-painless"
+      from components.java
+      artifact sourceJar {
+        classifier "sources"
+      }
+    }
+  }
+  repositories {
+    maven {
+      credentials {
+        username "${userRepo}"
+        password "${passwordRepo}"
+      }
+      if (project.version.toString().endsWith('-SNAPSHOT')) {
+        url "${snapshotsRepo}"
+      } else {
+        url "${releasesRepo}"
+      }
+    }
+  }
+}
+
+
 /* Build Javadoc for the Java classes in Painless's public API that are in the
  * Painless plugin */
 task apiJavadoc(type: Javadoc) {
