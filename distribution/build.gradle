@@ -488,6 +488,7 @@ configure(distributions.findAll { ['deb', 'rpm'].contains(it.name) }) {
 
 task run(type: RunTask) {
   distribution = 'zip'
+  debug = true
 }
 
 /**

@@ -23,6 +23,7 @@ import org.apache.lucene.index.LeafReaderContext;
 import org.elasticsearch.SpecialPermission;
 import org.elasticsearch.common.component.AbstractComponent;
 import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.index.query.QueryShardContext;
 import org.elasticsearch.painless.Compiler.Loader;
 import org.elasticsearch.painless.spi.Whitelist;
 import org.elasticsearch.script.ExecutableScript;
@@ -172,6 +173,20 @@ public final class PainlessScriptEngine extends AbstractComponent implements Scr
         }
     }
 
+    private Class<?>[] filter(Class<?>[] parameterTypes) {
+        Class<?>[] filtered = new Class<?>[parameterTypes.length-1];
+        int i = 0;
+        for (Class<?> parameterType : parameterTypes) {
+            if (parameterType != QueryShardContext.class) {
+                filtered[i] = parameterType;
+                i++;
+            }
+        }
+        return filtered;
+    }
+
+
+
     /**
      * Generates a stateful factory class that will return script instances.  Acts as a middle man between
      * the {@link ScriptContext#factoryClazz} and the {@link ScriptContext#instanceClazz} when used so that
@@ -202,6 +217,9 @@ public final class PainlessScriptEngine extends AbstractComponent implements Scr
                 break;
             }
         }
+
+        Class<?>[] factoryParametersType = filter(newFactory.getParameterTypes());
+
 
         for (int count = 0; count < newFactory.getParameterTypes().length; ++count) {
             writer.visitField(Opcodes.ACC_PRIVATE | Opcodes.ACC_FINAL, "$arg" + count,
@@ -241,7 +259,7 @@ public final class PainlessScriptEngine extends AbstractComponent implements Scr
         org.objectweb.asm.commons.Method instance = new org.objectweb.asm.commons.Method(newInstance.getName(),
             MethodType.methodType(newInstance.getReturnType(), newInstance.getParameterTypes()).toMethodDescriptorString());
 
-        List<Class<?>> parameters = new ArrayList<>(Arrays.asList(newFactory.getParameterTypes()));
+        List<Class<?>> parameters = new ArrayList<>(Arrays.asList(factoryParametersType));
         parameters.addAll(Arrays.asList(newInstance.getParameterTypes()));
 
         org.objectweb.asm.commons.Method constru = new org.objectweb.asm.commons.Method("<init>",
@@ -254,9 +272,9 @@ public final class PainlessScriptEngine extends AbstractComponent implements Scr
         adapter.newInstance(WriterConstants.CLASS_TYPE);
         adapter.dup();
 
-        for (int count = 0; count < newFactory.getParameterTypes().length; ++count) {
+        for (int count = 0; count < factoryParametersType.length; ++count) {
             adapter.loadThis();
-            adapter.getField(Type.getType(className), "$arg" + count, Type.getType(newFactory.getParameterTypes()[count]));
+            adapter.getField(Type.getType(className), "$arg" + count, Type.getType(factoryParametersType[count]));
         }
 
         adapter.loadArgs();
@@ -318,6 +336,8 @@ public final class PainlessScriptEngine extends AbstractComponent implements Scr
                 break;
             }
         }
+
+        Class<?>[] parametersType = filter(reflect.getParameterTypes());
 
         org.objectweb.asm.commons.Method instance = new org.objectweb.asm.commons.Method(reflect.getName(),
             MethodType.methodType(reflect.getReturnType(), reflect.getParameterTypes()).toMethodDescriptorString());
