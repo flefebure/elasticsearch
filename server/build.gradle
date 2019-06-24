@@ -34,9 +34,9 @@ publishing {
 
     maven(MavenPublication) {
       if (project.version.toString().endsWith('-SNAPSHOT'))
-        version "${project.version}".replaceAll('-SNAPSHOT', '') + ".SOFTBRIDGE-SNAPSHOT"
+        version "${project.version}".replaceAll('-SNAPSHOT', '') + ".SOFTBRIDGE-1.0.0-SNAPSHOT"
       else
-        version "${project.version}.SOFTBRIDGE"
+        version "${project.version}.SOFTBRIDGE-1.0.0"
       artifactId "elasticsearch"
       from components.java
       artifact sourceJar {

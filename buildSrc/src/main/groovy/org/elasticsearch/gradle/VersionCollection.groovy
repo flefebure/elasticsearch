@@ -38,7 +38,7 @@ class VersionCollection {
     VersionCollection(List<String> versionLines) {
 
         List<Version> versions = []
-
+        System.out.println("VersionCollection");
         for (final String line : versionLines) {
             final Matcher match = line =~ /\W+public static final Version V_(\d+)_(\d+)_(\d+)(_alpha\d+|_beta\d+|_rc\d+)? .*/
             if (match.matches()) {
